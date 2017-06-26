@@ -8,6 +8,9 @@ Author: Schaffer Stewart
 Author URI: https://schaffer.tech
  */
 
+defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
+include_once 'admin.inc';
+
 function swapi_form_code() {
 	echo '<form action ="' . esc_url( $_SERVER['REQUEST_URI'] ) . '" method="post">';
 	echo '<p>';
@@ -38,7 +41,7 @@ function swapi_name_search() {
 }
 
 function swapi_display_results( $response ) {
-	if(!empty($response['results'])){
+	if ( ! empty( $response['results'] ) ) {
 		$root_object = $response['results'][0];
 		$person      = array(
 			'name'       => $root_object['name'],
@@ -57,7 +60,8 @@ function swapi_display_results( $response ) {
 		}
 		echo '</ul>';
 	} else {
-		echo '<p>No results &#x2639</p>';
+	    $not_found = !empty(get_option('swapi-not-found-message')) ? esc_html(get_option('swapi-not-found-message')) : 'No results &#x2639';
+		echo "<p>$not_found</p>";
 	}
 
 }
@@ -71,5 +75,3 @@ function swapi_shortcode() {
 }
 
 add_shortcode( 'swapi_name_search', 'swapi_shortcode' );
-
-?>
